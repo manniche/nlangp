@@ -5,27 +5,36 @@ from collections import Counter
 
 def unigram_counts( unigram_coll, counts={} ):
     """
-    input of the form:
-    
+    >>> unigram_counts([('first',), ('sentence',), ('second',), ('sentence',), ('third',), ('one',)])
+    {('first',): 1, ('sentence',): 2, ('one',): 1, ('third',): 1, ('second',): 1}
     """
     for word in unigram_coll:
         if counts.has_key( word ):
             counts[word] = counts[word]+1
         else:
             counts[word] = 1
-    #print( "unigram: {0}".format( counts ) )
     return counts
 
 def ngram_counts( ngram_coll ):
-
+    """
+    >>> bigram_format( ["sentence one is this one", "and this one is the second"] ) #doctest: +NORMALIZE_WHITESPACE
+    [[('sentence', 'one'), ('one', 'is'), ('is', 'this'), ('this', 'one')], [('and', 'this'), ('this', 'one'), ('one', 'is'), ('is', 'the'), ('the', 'second')]]
+    """
     counts = {}
 
     for item in ngram_coll:
         unigram_counts( item, counts )
-        #print( "ngrams: {0}".format( counts ) )
     return counts
 
 def unigram_format( test_corpus ):
+    """
+    This function takes a list of sentences and produces tokens
+    suitable for unigram formatting
+
+    >>> unigram_format( [ "first sentence", "second sentence", "third one" ] ) #doctest: +NORMALIZE_WHITESPACE
+    [('first',), ('sentence',), ('second',), ('sentence',), ('third',), ('one',)]
+    """
+
     wl = []
 
     for sentence in test_corpus:
@@ -35,10 +44,19 @@ def unigram_format( test_corpus ):
     return wl
 
 def bigram_format( test_corpus ):
+    """
+    >>> bigram_format(["the dog runs STOP", "the cat walks STOP", "the dog runs STOP"])
+    [[('the', 'dog'), ('dog', 'runs'), ('runs', 'STOP')], [('the', 'cat'), ('cat', 'walks'), ('walks', 'STOP')], [('the', 'dog'), ('dog', 'runs'), ('runs', 'STOP')]]
+    """
+
     wl = [ [word for word in sentence.split()] for sentence in test_corpus] 
     return [ util.bigrams( l ) for l in wl ]
 
 def trigram_format( test_corpus ):
+    """
+    >>> trigram_format(["the dog runs STOP", "the cat walks STOP", "the dog runs STOP"])
+    [[('the', 'dog', 'runs'), ('dog', 'runs', 'STOP')], [('the', 'cat', 'walks'), ('cat', 'walks', 'STOP')], [('the', 'dog', 'runs'), ('dog', 'runs', 'STOP')]]
+    """
     wl = [ [word for word in sentence.split()] for sentence in test_corpus] 
     return [ util.trigrams( l ) for l in wl ]
 
@@ -60,10 +78,13 @@ def perplexity( corpus, propdict ):
     return pow( 2, -l )
 
 def sentence_probability( sentence, propdict ):
+    """
+    >>> sentence_probability("the dog runs STOP", {"the": {("*","*"):1}, "dog": {("*", "the"):0.5}})
+    """
     p = 1
     sents = list(sentence.split())
     for word in sents:
-        p = p * float( propdict[ word ].values()[0] )
+        p = p * float( propdict.get( word ).values()[0] )
 
     return float( p )
 
@@ -75,6 +96,8 @@ def _get_from_propdict( propdict, key ):
             return ( key, ())
 
 if __name__ == '__main__':
+    import doctest
+    doctest.testmod()
     corp = ["the green book STOP",
             "the blue book STOP",
             "his green house STOP",
