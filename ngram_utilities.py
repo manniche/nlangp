@@ -116,17 +116,22 @@ def _get_from_propdict( propdict, key ):
             return ( key, ())
 
 if __name__ == '__main__':
-    import doctest
-    doctest.testmod()
-    corp = ["the green book STOP",
-            "the blue book STOP",
-            "his green house STOP",
-            "book STOP"]
+    # import doctest
+    # doctest.testmod()
+    # corp = ["the green book STOP",
+    #         "the blue book STOP",
+    #         "his green house STOP",
+    #         "book STOP"]
 
-    corp2 = ["the dog runs STOP", "the cat walks STOP", "the dog runs STOP"]
-    props = {"the": {("*","*"):1}, "dog": {("*", "the"):0.5}, "cat": {("*", "the"):0.5}, "walks":{("cat", "the"):1}, "STOP":{("cat","walks"):1}, "runs":{("the","dog"):1}, "STOP":{("dog","runs"):1}}
+    # corp2 = ["the dog runs STOP", "the cat walks STOP", "the dog runs STOP"]
+    # props = {"the": {("*","*"):1}, "dog": {("*", "the"):0.5}, "cat": {("*", "the"):0.5}, "walks":{("cat", "the"):1}, "STOP":{("cat","walks"):1}, "runs":{("the","dog"):1}, "STOP":{("dog","runs"):1}}
 
-    print( "unigram counts: {0}".format( unigram_counts( unigram_format( corp2 ) ) ) )
-    print( "bigram counts: {0}".format( ngram_counts( bigram_format( corp2 ) ) ) )
-    print( "trigram counts: {0}".format( ngram_counts( trigram_format( corp2 ) ) ) )
-    print( "perplexity: {0}".format( perplexity( corp2, props ) ) )
+    # print( "unigram counts: {0}".format( unigram_counts( unigram_format( corp2 ) ) ) )
+    # print( "bigram counts: {0}".format( ngram_counts( bigram_format( corp2 ) ) ) )
+    # print( "trigram counts: {0}".format( ngram_counts( trigram_format( corp2 ) ) ) )
+
+    c1 = [ "the dog STOP" ]
+    p1 = { "the": {("*","*"):1}, "dog": {("the","*"):1}, "STOP":{("dog","the"):1}}
+    p2 = { "the": {("*","*"):0.5}, "a": {("*","*"):0.5}, "dog": {("the","*"):1},"dog": {("a","*"):1}, "STOP":{("dog","the"):1}}
+    print( "perplexity: {0}".format( perplexity( c1, p1 ) ) )
+    print( "perplexity: {0}".format( perplexity( c1, p1 ) ) )
