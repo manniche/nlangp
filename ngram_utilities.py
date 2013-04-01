@@ -77,14 +77,34 @@ def perplexity( corpus, propdict ):
     print( "1/{0}*{1}".format( m, logp) )
     return pow( 2, -l )
 
+def prob_mass( ngrams, word, discount ):
+    """
+    Given a dict of `ngrams`, a `word` and a `discount` factor, this
+    function returns the remaining probability mass
+    >>> ngrams = ngram_counts(bigram_format(["the dog eats the cat", "the cat walks the walk", "the cat and the dog catches the mouse"]))
+    >>> prob_mass(ngrams, 'the', 0.3)
+    1.234    
+    """
+    pm = 0.0
+    word_count = 0
+    for ngram_tuple in ngrams.keys():
+        if ngram_tuple[0] == word:
+            word_count += ngrams.get(ngram_tuple)
+    print( ngrams )
+    print( "occurrence of {0} in ngram basis: {1}".format( word, word_count ) )
+
+    return pm
+
 def sentence_probability( sentence, propdict ):
     """
     >>> sentence_probability("the dog runs STOP", {"the": {("*","*"):1}, "dog": {("*", "the"):0.5}})
+    0.5
     """
     p = 1
     sents = list(sentence.split())
     for word in sents:
-        p = p * float( propdict.get( word ).values()[0] )
+        if propdict.get( word ) is not None:
+            p = p * float( propdict.get( word ).values()[0] )
 
     return float( p )
 
