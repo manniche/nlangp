@@ -21,27 +21,31 @@ def count_wordtags( counts ):
 def find_tag_for_word( observations, word ):
     """
     >>> obs = count_wordtags([[2, "WORDTAG", "O", "infection"],[ 1, "WORDTAG", "I-GENE", "UEV1A"],[ 1, "WORDTAG", "O", "Hospital"]])
-    >>> word = "Hospital"
-    >>> find_tag_for_word( obs, word )
-
+    >>> find_tag_for_word( obs, 'Hospital' )
+    'O'
+    >>> find_tag_for_word( obs, 'UEV1A' )
+    'I-GENE'
+    >>> find_tag_for_word( obs, 'does_not_exist')
     """
 
     maximum_probability = 0.0
     best_tag = None
 
-    rarewords = [ word for word in not is_in_observations(observations, word) ]
-
     for observation in observations:
-        if word in rarewords:
+        if not is_in_observations( word, observations ):
             word = "_RARE_"
-        prob = observations[observation]["word_counts"][word] / observations[observation]["total_count"]
+        prob = float( observations[observation]["word_count"][word] ) / float( observations[observation]["tag_count"] )
         if prob > maximum_probability:
             best_tag = observation
             maximum_probability = prob
     return best_tag
 
-def is_in_observations( observations, word ):
+def is_in_observations( word, observations ):
+    for observation in observations:
+        if word in observations[observation]["word_count"]:
+            return True
     return False
+
 
 def __makedd():
     return defaultdict(
@@ -54,3 +58,5 @@ def __makedd():
 if __name__ == '__main__':
     import doctest
     doctest.testmod()
+
+    
