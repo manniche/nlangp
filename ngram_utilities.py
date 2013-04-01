@@ -17,8 +17,8 @@ def unigram_counts( unigram_coll, counts={} ):
 
 def ngram_counts( ngram_coll ):
     """
-    >>> bigram_format( ["sentence one is this one", "and this one is the second"] ) #doctest: +NORMALIZE_WHITESPACE
-    [[('sentence', 'one'), ('one', 'is'), ('is', 'this'), ('this', 'one')], [('and', 'this'), ('this', 'one'), ('one', 'is'), ('is', 'the'), ('the', 'second')]]
+    >>> ngram_counts(bigram_format( ["sentence one is this one", "and this one is the second"] )) #doctest: +NORMALIZE_WHITESPACE
+    {('is', 'this'): 1, ('sentence', 'one'): 1, ('one', 'is'): 2, ('is', 'the'): 1, ('and', 'this'): 1, ('this', 'one'): 2, ('the', 'second'): 1}
     """
     counts = {}
 
