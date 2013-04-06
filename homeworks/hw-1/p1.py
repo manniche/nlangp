@@ -28,6 +28,7 @@ def find_tag_for_word( observations, word ):
     >>> find_tag_for_word( obs, 'UEV1A' )
     'I-GENE'
     >>> find_tag_for_word( obs, 'does_not_exist')
+    'O'
     """
 
     maximum_probability = 0.0
@@ -63,7 +64,24 @@ def __makedd():
         )
 
 if __name__ == '__main__':
-    import doctest
-    doctest.testmod()
+    # import doctest
+    # doctest.testmod()
 
-    
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument( "gene_counts" )
+    parser.add_argument( "gene_dev" )
+    args = parser.parse_args()
+
+    l = [line.strip().split( " " ) for line in open(args.gene_counts, "r")]
+
+    observations = count_wordtags( l )
+
+    with open( args.gene_dev, "r" ) as infile:
+        for line in infile:
+            word = line.strip()
+            if not word:
+                print
+                continue
+            tag = find_tag_for_word( observations, word )
+            print word, tag
