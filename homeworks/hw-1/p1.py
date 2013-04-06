@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
+from __future__ import division 
 from collections import defaultdict
+import sys
 
 def count_wordtags( counts ):
     """
@@ -34,10 +36,15 @@ def find_tag_for_word( observations, word ):
     for observation in observations:
         if not is_in_observations( word, observations ):
             word = "_RARE_"
-        prob = float( observations[observation]["word_count"][word] ) / float( observations[observation]["tag_count"] )
+        prob = observations[observation]["word_count"][word] / observations[observation]["tag_count"]
         if prob > maximum_probability:
             best_tag = observation
             maximum_probability = prob
+
+        if best_tag is None or word is "_RARE_":
+            #sys.stderr.write( word+"\n" )
+            best_tag = None
+
     return best_tag
 
 def is_in_observations( word, observations ):
